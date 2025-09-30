@@ -115,7 +115,7 @@ sudo pacman -Syu
 
 exit
 
-systemctl enable networkmanager
+systemctl enable NetworkManager
 
 ## setup bootloader
 

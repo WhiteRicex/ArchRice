@@ -1,6 +1,12 @@
 # ArchRice
 Documentation and backup for my arch setup
 
+# Dual Booting
+
+## Windows (no hibernation and no fast startup)
+in admin cmd run: 
+powercfg /H off
+
 # setup
 Note: This was set up using Hyper-V so it may not work perfectly. I will be following this guide i wrote for installing arch onto my surface
 
@@ -24,14 +30,28 @@ if not you can investigate to see if the interface is enable with:
 ip link
 
 ### wifi
+#### when installing
 use iwctl
+
+iwctl
+station list
+station wlan0 get-networks
+station wlan0 connect RiceNet
+
+#### post install
+use nmcli
+
+nmcli dev status
+nmcli radio wifi on
+nmcli dev wifi list
+sudo nmcli dev wifi connect RiceNet --ask
 
 ## setup partitions
 lsblk
 
 fdisk /dev/sda
 
-g < gpt
+g < create fresh gpt partition table < skip this if dual Booting
 n < boot
 	default
 	default
@@ -119,7 +139,12 @@ systemctl enable NetworkManager
 
 ## setup bootloader
 
+for singleboot:
 grub-install /dev/sda
+
+for dualboot:
+grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB
+
 grub-mkconfig -o /boot/grub/grub.cfg
 
 ## done
@@ -127,3 +152,17 @@ grub-mkconfig -o /boot/grub/grub.cfg
 exit
 umount -a
 reboot
+
+## connecting windows boot entry to grub
+
+install os-prober
+
+sudo pacman -Sy os-prober fuse3
+
+change grub boot time to 20s (or something higher so you have time to select between win and linux)
+
+uncomment "GRUB_DISABLE_OS_PROBER=false"
+
+rebuild grub config
+
+sudo grub-mkconfig -o /boot/grub/grub.cfg

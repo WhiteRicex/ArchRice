@@ -167,3 +167,7 @@ nvim /etc/default/grub
 rebuild grub config
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+## waybar fonts
+otf-font-awesome
+nerd-fonts

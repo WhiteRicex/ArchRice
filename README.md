@@ -162,6 +162,7 @@ sudo pacman -Sy os-prober fuse3
 change grub boot time to 20s (or something higher so you have time to select between win and linux)
 
 uncomment "GRUB_DISABLE_OS_PROBER=false"
+nvim /etc/default/grub
 
 rebuild grub config
 
